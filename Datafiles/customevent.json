@@ -1,0 +1,12 @@
+[
+    {
+        "id": "bb15",
+        "eventType": "td-demo",
+        "subject": "bb/techdays/customevents",
+        "eventTime": "'`date +%Y-%m-%dT%H:%M:%S%z`'",
+        "data":{
+            "party": "Betabit",
+            "reason": "15 years old!"
+        }
+    }
+]
