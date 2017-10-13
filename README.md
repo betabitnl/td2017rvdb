@@ -37,9 +37,9 @@ https://requestb.in
 4. Subscribe to a topic  
 `az eventgrid topic event-subscription create --name <SUBSCRIPTION_NAME> --endpoint <REQUESTBIN_URL> -g <RESOURCEGROUP_NAME> --topic-name <TOPIC_NAME>`
 5. Send an event to your topic   
-`endpoint=$(az eventgrid topic show --name <TOPIC_NAME> -g <RESOURCEGROUP_NAME> --query "endpoint" --output tsv)  
-key=$(az eventgrid topic key list --name <TOPIC_NAME> -g <RESOURCEGROUP_NAME> --query "key1" --output tsv)  
-body=$(eval echo "'$(curl https://raw.githubusercontent.com/betabitnl/td2017rvdb/master/Datafiles/customevent.json)'")  
-curl -X POST -H "aeg-sas-key: $key" -d "$body" $endpoint`  
+`endpoint=$(az eventgrid topic show --name <TOPIC_NAME> -g <RESOURCEGROUP_NAME> --query "endpoint" --output tsv)`  
+`key=$(az eventgrid topic key list --name <TOPIC_NAME> -g <RESOURCEGROUP_NAME> --query "key1" --output tsv)`  
+`body=$(eval echo "'$(curl https://raw.githubusercontent.com/betabitnl/td2017rvdb/master/Datafiles/customevent.json)'")`  
+`curl -X POST -H "aeg-sas-key: $key" -d "$body" $endpoint`  
 6. Clean up resources  
 `az group delete --name <RESOURCEGROUP_NAME>`
