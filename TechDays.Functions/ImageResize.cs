@@ -16,6 +16,18 @@ namespace TechDays.Functions
 {
     public static class ImageResize
     {
+        #region Fields
+
+        private static Instructions _instructions = new Instructions
+        {
+            Width = 150,
+            Height = 150,
+            Mode = FitMode.Crop,
+            Scale = ScaleMode.Both
+        };
+
+        #endregion
+
         [FunctionName("ImageResize")]
         public static async Task<object> Run([HttpTrigger(WebHookType = "genericJson")]HttpRequestMessage req, TraceWriter log)
         {
@@ -26,29 +38,21 @@ namespace TechDays.Functions
             {
                 dynamic request = JsonConvert.DeserializeObject<dynamic>(jsonContent)[0];
 
-                var instructions = new Instructions
-                {
-                    Width = 150,
-                    Height = 150,
-                    Mode = FitMode.Crop,
-                    Scale = ScaleMode.Both
-                };
-
                 using (var original = new MemoryStream())
                 using (var thumb = new MemoryStream())
                 {
                     string url = request.data.url;
                     var filename = url.Substring(url.LastIndexOf('/') + 1);
-                    CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=td2017gs2storage;AccountKey=4aVNGE9TeT4O1GwsM653pyGKsxgN2PfIRepJAomzweDvMn16ussrRV+Y7yLa+/+6YyeAZvEujKK0QZei9yCOmg==;EndpointSuffix=core.windows.net");
+                    CloudStorageAccount storageAccount = CloudStorageAccount.Parse("UseDevelopmentStorage=true");
                     CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-                    CloudBlobContainer inputContainer = blobClient.GetContainerReference("input");
+                    CloudBlobContainer inputContainer = blobClient.GetContainerReference("INPUT_CONTAINERNAME");
                     CloudBlockBlob originalBlob = inputContainer.GetBlockBlobReference(filename);
-                    CloudBlobContainer outputContainer = blobClient.GetContainerReference("processed");
+                    CloudBlobContainer outputContainer = blobClient.GetContainerReference("OUTPUT_CONTAINERNAME");
                     CloudBlockBlob blockBlob = outputContainer.GetBlockBlobReference($"thumb-{filename}");
 
                     await originalBlob.DownloadToStreamAsync(original);
                     original.Seek(0, SeekOrigin.Begin);
-                    ImageBuilder.Current.Build(new ImageJob(original, thumb, instructions));
+                    ImageBuilder.Current.Build(new ImageJob(original, thumb, _instructions));
                     thumb.Seek(0, SeekOrigin.Begin);
 
                     await blockBlob.UploadFromStreamAsync(thumb);

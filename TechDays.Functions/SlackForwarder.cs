@@ -36,7 +36,8 @@ namespace TechDays.Functions
                     log.Info(url);
                     string filename = url.Substring(url.LastIndexOf('/') + 1);
                     log.Info(filename);
-                    response = client.UploadString("https://hooks.slack.com/services/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", MESSAGE);
+                    response = client.UploadString("https://hooks.slack.com/services/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", 
+                        MESSAGE);
                     log.Info(response);
                 }
 
