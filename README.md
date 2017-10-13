@@ -1,4 +1,4 @@
-# td2017rvdb
+# Rick van den Bosch @ TechDays 2017
 Code and supporting files for the TechDays 2017 session of @rickvdbosch
 "Going Serverless (2/2): Hands-on with Azure Event Grid"
 
